@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+kivy_venv/
+env/
+
+# Kivy
+.kivy/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Local config (future exercises)
+preferences.json
+
+# Distribution
+build/
+dist/
+*.egg-info/
