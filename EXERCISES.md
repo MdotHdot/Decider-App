@@ -6,10 +6,12 @@ Work through these in order. Earlier ones are done; new ones build on advanced s
 
 | Part | Status |
 |------|--------|
-| CLI (`main.py`) | Mood, genre, duration filters |
+| CLI (`cli.py`) | Mood, genre, duration filters |
 | GUI single filters | Mood, genre, duration |
 | Advanced Search screen | UI + combined search (with one bug — Exercise 5) |
 | Movie database | 28 films with genre, mood, duration, rating, year |
+| Online search (TMDB) | CLI option 7 — requires `TMDB_API_KEY` |
+| IMDb scraper | Skeleton only — Exercise 13 |
 | Repo setup | `.gitignore`, `requirements.txt`, own git root |
 
 ---
@@ -71,7 +73,7 @@ When tapped, pick a **random** film from `self.recommendations` (use `import ran
 
 ## Exercise 9 — Advanced search in CLI (~30 min)
 
-**File:** `main.py`
+**File:** `cli.py`
 
 Add menu option **6. Advanced search** that asks for mood, genre, and duration (allow blank/Enter to skip), then calls `recommend()` with the combined criteria.
 
@@ -124,6 +126,62 @@ Save the last advanced search to `preferences.json` on submit, reload in `on_ent
 
 ---
 
+## Exercise 13 — Finish IMDb scrape (~45 min)
+
+**File:** `film_search.py` → `scrape_imdb_search()`
+
+**Goal:** Practice BeautifulSoup. Prefer TMDB for real use — IMDb HTML breaks often.
+
+**Steps:**
+
+1. Use `requests.get` on `https://www.imdb.com/find/?q=<query>&s=tt`
+2. Send a browser-like `User-Agent` header (IMDb often rejects default Python agents)
+3. Parse HTML with `BeautifulSoup(html, "html.parser")`
+4. Find result rows (inspect the page in DevTools — selectors change)
+5. For each hit, extract title and year into a Decider-shaped dict with `"source": "imdb"`
+6. Remove the `raise NotImplementedError`
+
+**Optional:** In CLI option 7, ask `tmdb` vs `imdb` and call your scraper when chosen.
+
+---
+
+## Exercise 14 — Guess moods for online films (~30 min)
+
+**File:** `film_search.py`
+
+Online films currently have `"mood": []`, so mood filters ignore them.
+
+**Goal:** Add `guess_moods(genre, overview)` that returns a short list of mood tags from keywords, e.g.:
+
+- genre Horror → `["dark", "suspenseful"]`
+- overview contains "love" → add `"romantic"`
+
+Call it from `normalize_tmdb_result`.
+
+---
+
+## Exercise 15 — Persist added films (~30 min)
+
+**Files:** new `movies.json` and/or `movies_db.py`
+
+When the user adds a TMDB film in CLI option 7, save it so the next run still has it.
+
+**Approach:** Append to `movies.json` (or rewrite the list), then load that file in `movies_db.py` (see Exercise 11).
+
+---
+
+## Exercise 16 — GUI Online Search screen (~45 min)
+
+**Files:** `decider_app.py`, `decider.kv`
+
+Add an **Online** button on the main screen that opens a new screen:
+
+1. Text box + Search button
+2. Call `search_tmdb` (run network calls carefully — Kivy is single-threaded)
+3. Show results; tap one to enrich + optionally merge into `app.recommender.movies`
+
+---
+
 ## Quick reference
 
 ```python
@@ -133,6 +191,10 @@ recommender.recommend(
     time_available=120,       # or None to skip
     min_rating=8.0,           # Exercise 7
 )
+
+from film_search import search_tmdb, enrich_with_details, merge_movies
+results = search_tmdb("Inception")   # needs TMDB_API_KEY
+detailed = enrich_with_details(results[0])
 ```
 
 Happy building 🍿

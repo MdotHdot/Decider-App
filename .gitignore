@@ -20,10 +20,18 @@ env/
 *.swp
 .DS_Store
 
-# Local config (future exercises)
+# Local config / secrets
 preferences.json
+.env
+*.env
 
 # Distribution
 build/
 dist/
 *.egg-info/
+
+# Android / Buildozer
+.buildozer/
+bin/
+*.apk
+*.aab

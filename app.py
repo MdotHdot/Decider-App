@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Entry point for the Kivy GUI. Run: python app.py"""
+"""Desktop GUI entry point. Same as main.py — use either."""
 
 from decider_app import DeciderApp
 
