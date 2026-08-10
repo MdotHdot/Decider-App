@@ -10,14 +10,15 @@ The phone app is the **Kivy GUI** (`main.py`). The CLI (`cli.py`) and TMDB onlin
 
 ## Recommended path: GitHub Actions (no Docker on your Mac)
 
-You don’t have Docker installed, and Buildozer on macOS Apple Silicon is painful. Use CI instead:
+Buildozer on macOS Apple Silicon is painful — use CI instead:
 
-1. Commit and push this branch (includes `buildozer.spec` + workflow).
-2. On GitHub: **Actions** → **Build Android APK** → **Run workflow**.
-3. Wait for the job (first run can take **30–90 minutes** while it downloads the Android SDK/NDK).
-4. Open the finished run → **Artifacts** → download `movie-decider-apk`.
-5. Copy the `.apk` to your phone (AirDrop, Drive, USB, etc.).
-6. On the phone: allow **Install unknown apps** for your file manager/browser, then open the APK.
+1. On GitHub: **Actions** → **Build Android APK** → **Run workflow** (on `main`).
+2. Wait for the job (first run can take **30–90 minutes** while it downloads the Android SDK/NDK).
+3. Open the finished run → **Artifacts** → download `movie-decider-apk`.
+4. Copy the `.apk` to your phone (AirDrop, Drive, USB, etc.).
+5. On the phone: allow **Install unknown apps** for your file manager/browser, then open the APK.
+
+If the workflow fails on `LT_SYS_SYMBOL_USCORE`, the runner is missing `libltdl-dev` / `automake` — that is already covered in `.github/workflows/build-android.yml`.
 
 ### Install tips
 
