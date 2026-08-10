@@ -7,6 +7,9 @@ name: Build Android APK
 on:
   workflow_dispatch:
 
+env:
+  PYTHONFORANDROID_PREREQUISITES_INSTALL_INTERACTIVE: "0"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,18 +24,25 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            git unzip openjdk-17-jdk autoconf libtool pkg-config \
-            zlib1g-dev libncurses5-dev libncursesw5-dev cmake \
-            libffi-dev libssl-dev build-essential ccache
+            git zip unzip openjdk-17-jdk autoconf automake libtool \
+            libltdl-dev pkg-config zlib1g-dev libncurses-dev \
+            cmake libffi-dev libssl-dev build-essential ccache
 
       - name: Install Buildozer
         run: |
-          pip install --upgrade pip
-          pip install "buildozer==1.5.0" "cython<3" virtualenv
+          pip install --upgrade pip setuptools wheel
+          pip install "cython<3" virtualenv
+          pip install "git+https://github.com/kivy/buildozer.git"
 
       - name: Cache Buildozer / SDK
         uses: actions/cache@v4
@@ -40,7 +50,7 @@ jobs:
           path: |
             ~/.buildozer
             .buildozer
-          key: buildozer-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+          key: buildozer-${{ runner.os }}-${{ hashFiles('buildozer.spec', '.github/workflows/build-android.yml') }}
 
       - name: Build debug APK
         run: buildozer -v android debug
