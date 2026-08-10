@@ -6,12 +6,16 @@ A Python app to help you pick a film based on **mood**, **genre**, and **time av
 
 ```
 .
-├── app.py               # GUI entry point
+├── main.py              # GUI entry (Android / Buildozer)
+├── app.py               # Same GUI (desktop convenience)
+├── cli.py               # CLI + TMDB online search
 ├── decider_app.py       # Kivy screens and logic
 ├── decider.kv           # Kivy UI layout
-├── main.py              # CLI entry point
+├── film_search.py       # TMDB online search (+ IMDb scrape exercise)
 ├── recommender.py       # Recommendation engine
 ├── movies_db.py         # Movie database (28 films)
+├── buildozer.spec       # Android APK packaging config
+├── ANDROID.md           # How to build/install on a phone
 ├── EXERCISES.md         # Your to-do list — work through these next
 ├── requirements.txt     # Python dependencies
 └── .gitignore
@@ -54,41 +58,66 @@ Then in VS Code: **File → Open Folder** and open the `decider app` folder dire
 ### 3. Run the app
 
 ```bash
-# CLI
-python main.py
+# CLI (+ TMDB online search)
+python cli.py
 
-# GUI
-python app.py
+# GUI (desktop)
+python main.py
+# or: python app.py
 ```
+
+### Android APK (phone feel-test)
+
+See **[ANDROID.md](ANDROID.md)**. Short version: push the branch, run the **Build Android APK** GitHub Action, download the artifact, install on your phone.
+
+### 4. Online search (TMDB)
+
+TMDB is a free official movie API (more reliable than scraping IMDb/RT).
+
+1. Create a free account at [themoviedb.org](https://www.themoviedb.org/signup)
+2. Get an API key: [Settings → API](https://www.themoviedb.org/settings/api)
+3. Export it in your shell:
+
+```bash
+export TMDB_API_KEY="your_key_here"
+```
+
+4. Run the CLI and choose **7. Search online (TMDB)**
+
+You can preview results and optionally add a film to the **current session** (not saved to disk yet — Exercise 15).
+
+IMDb scraping is left as **Exercise 13** in `film_search.py` for learning BeautifulSoup.
 
 ## Features
 
 - **Single filters** — mood, genre, or duration alone
 - **Advanced Search** — combine all three (fix "Any" in Exercise 5)
-- **28 films** — drama, comedy, sci-fi, horror, animation, and more
+- **Online search** — TMDB API from the CLI
+- **28 local films** — drama, comedy, sci-fi, horror, animation, and more
 
 ## Your next steps
 
-Open **`EXERCISES.md`** and start with **Exercise 5** (fix "Any" in advanced search).
+Open **`EXERCISES.md`**. For this branch, start with **Exercise 13** (IMDb scrape) after trying CLI option 7.
 
 | Exercise | What you'll build |
 |----------|-------------------|
-| 5 | Skip filters when user picks "Any" |
-| 6 | Show match count before results |
-| 7 | Minimum rating filter |
-| 8 | "Surprise me" random pick |
-| 9 | Advanced search in CLI |
-| 10 | Add your own films |
+| 5–12 | Earlier GUI / CLI polish (see EXERCISES.md) |
+| 13 | Finish IMDb BeautifulSoup scraper |
+| 14 | Guess moods for online films |
+| 15 | Persist added films to disk |
+| 16 | GUI Online Search screen |
 
 ## CLI quick examples
 
 ```bash
-python main.py --mood=intense --time=150
-python main.py --genre=Comedy
-python main.py
+python cli.py --mood=intense --time=150
+python cli.py --genre=Comedy
+python cli.py
 ```
 
 ## Requirements
 
 - Python 3.10+
-- Kivy 2.3+ (GUI only — CLI has no dependencies)
+- Kivy 2.3+ (GUI)
+- `requests` (TMDB CLI search)
+- `beautifulsoup4` (Exercise 13 scraper)
