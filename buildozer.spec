@@ -15,23 +15,17 @@ source.dir = .
 # (list) Source files to include (let empty to include all the files)
 source.include_exts = py,png,jpg,kv,atlas
 
-# (list) List of inclusions using pattern matching
-# source.include_patterns = assets/*,images/*.png
-
 # (list) Source files to exclude
 source.exclude_exts = spec
-source.exclude_dirs = tests, bin, .venv, kivy_venv, venv, .buildozer, __pycache__
-source.exclude_patterns = license,images/*/*.jpg,.git/*,*.md
+source.exclude_dirs = tests, bin, .venv, kivy_venv, venv, .buildozer, __pycache__, .github
+# Keep CLI/TMDB modules out of the APK so p4a does not pull requests/bs4
+source.exclude_patterns = license,images/*/*.jpg,.git/*,*.md,cli.py,film_search.py
 
 # (str) Application versioning (method 1)
 version = 0.1.0
 
-# (list) Application requirements
-# GUI-only package for phone feel-test (no TMDB/CLI deps)
+# (list) Application requirements — GUI only for phone feel-test
 requirements = python3,kivy
-
-# (str) Presplash background color (str of r,g,b format)
-# android.presplash_color = #0d0d14
 
 # (str) Supported orientation
 orientation = portrait
@@ -54,14 +48,14 @@ android.ndk = 25b
 # (bool) Accept Android SDK license
 android.accept_sdk_license = True
 
-# (list) Android architectures
-android.archs = arm64-v8a, armeabi-v7a
+# Single arch for faster CI (covers modern phones including yours)
+android.archs = arm64-v8a
+
+# Stable p4a branch = Python <= 3.12 (avoid develop/Python 3.14 breakage)
+p4a.branch = master
 
 # (bool) Skip Android packaging if only Python files changed
 android.skip_update = False
-
-# (str) The format used to package the app for release mode (aab or apk or aar)
-# android.release_artifact = aab
 
 # (str) The format used to package the app for debug mode (apk or aar)
 android.debug_artifact = apk
