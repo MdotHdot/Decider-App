@@ -18,7 +18,17 @@ Buildozer on macOS Apple Silicon is painful — use CI instead:
 4. Copy the `.apk` to your phone (AirDrop, Drive, USB, etc.).
 5. On the phone: allow **Install unknown apps** for your file manager/browser, then open the APK.
 
-If the workflow fails on `LT_SYS_SYMBOL_USCORE`, the runner is missing `libltdl-dev` / `automake` — that is already covered in `.github/workflows/build-android.yml`.
+### Why builds were failing / slow
+
+| Issue | Fix in repo |
+|-------|-------------|
+| `LT_SYS_SYMBOL_USCORE` | Install `libltdl-dev` + `automake` |
+| Python 3.14 / broken pip in p4a | Pin Buildozer 1.5.0 + `p4a.branch = master` |
+| Auto-pulled `requests` from CLI modules | Exclude `cli.py` / `film_search.py` from the APK |
+| Long dual-arch builds | Build `arm64-v8a` only (modern phones) |
+| Node 20 action warnings | Use checkout/setup/cache/upload `@v5`/`@v6` |
+
+First run still downloads the Android SDK/NDK (~20–40+ min). Later runs use the cache and are faster.
 
 ### Install tips
 

@@ -18,6 +18,10 @@ class MovieRecommender:
     def filter_by_duration(self, max_minutes):
         """Filter movies that fit within available time."""
         return [m for m in self.movies if m["duration"] <= max_minutes]
+    
+    def filter_by_rating(self, min_rating):
+        """filter movies byt the rating"""
+        return [m for m in self.movies if m["rating"] >= min_rating]
 
     def recommend(self, mood=None, genre=None, time_available=None, min_rating=None):
         """
@@ -43,9 +47,8 @@ class MovieRecommender:
         if time_available:
             candidates = [m for m in candidates if m["duration"] <= time_available]
 
-        # TODO (Exercise 7): Filter by min_rating when provided
-        # if min_rating:
-        #     candidates = [m for m in candidates if m["rating"] >= min_rating]
+        if min_rating:
+             candidates = [m for m in candidates if m["rating"] >= min_rating]
 
         return sorted(candidates, key=lambda x: x["rating"], reverse=True)
 
@@ -62,3 +65,10 @@ class MovieRecommender:
         for movie in self.movies:
             genres.add(movie["genre"])
         return sorted(genres)
+    
+    def get_ratings(self):
+        """Get all available ratings in the database."""
+        ratings = set()
+        for movie in self.movies:
+            ratings.add(movie["rating"])
+        return sorted(ratings)
