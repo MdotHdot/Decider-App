@@ -138,6 +138,7 @@ class AdvancedSearchScreen(Screen):
         self.ids.adv_genre_spinner.values = genres
         self.ids.adv_genre_spinner.text = "Any"
         self.ids.adv_duration_input.text = "150"
+        self.ids.adv_rating_input.text = "Any"
         self.status_text = "Set your filters, then tap Search."
 
     def submit(self):
@@ -147,6 +148,7 @@ class AdvancedSearchScreen(Screen):
 
         mood = self.ids.adv_mood_spinner.text
         genre = self.ids.adv_genre_spinner.text
+        rating_text = self.ids.adv_rating_input.text.strip()
 
         try:
             time_available = int(self.ids.adv_duration_input.text)
@@ -154,9 +156,16 @@ class AdvancedSearchScreen(Screen):
             self.status_text = "Please enter a valid number for duration"
             return
 
-        # TODO (Exercise 5): When spinner shows "Any", pass None instead of "Any"
-        # so that filter is skipped. Right now "Any" is passed as a string and
-        # won't match anything — fix _resolve_filter below.
+        # "Any" / blank → skip rating filter; otherwise parse as float
+        if rating_text.lower() in ("", "any"):
+            min_rating = None
+        else:
+            try:
+                min_rating = float(rating_text)
+            except ValueError:
+                self.status_text = "Please enter a valid rating (e.g. 8.5) or Any"
+                return
+
         mood_arg = self._resolve_filter(mood)
         genre_arg = self._resolve_filter(genre)
 
@@ -164,32 +173,41 @@ class AdvancedSearchScreen(Screen):
             mood=mood_arg,
             genre=genre_arg,
             time_available=time_available,
+            min_rating=min_rating,
         )
 
-        # TODO (Exercise 6): Update status_text to show match count before navigating,
-        # e.g. "Found 3 matches" — only if you want feedback on this screen first.
+        count = len(recommendations)
+        if count >= 1:
+            self.status_text = f"Found {count} matches"
+            
+            result_screen.show_results(recommendations, "advanced search")
+            self.manager.current = "result"
+        
+        else:
+            self.status_text = "No movies matched your criteria."
+    
 
-        result_screen.show_results(recommendations, "advanced search")
-        self.manager.current = "result"
+
+
 
     def _resolve_filter(self, value):
-        """Convert spinner value to a recommend() argument.
-
-        TODO (Exercise 5): Return None when value is "Any", otherwise return value.
-        Currently broken on purpose — "Any" gets passed through as a string.
-        """
-        return value  # <-- your fix goes here
-
-
+        """Resolves genre and mood if any filter to be skipped."""
+        
+        if value == "Any":
+            return None
+        else:
+            return value
+        
 class ResultScreen(Screen):
     result_text = StringProperty("")
     recommendations = ListProperty([])
 
     def show_results(self, recommendations, filter_type):
         self.recommendations = recommendations
-        if recommendations:
+        if recommendations:           
             top = recommendations[0]
             self.result_text = (
+                f"there is {len(recommendations)} matching your criteria!\n"
                 f"Top pick: {top['title']}\n"
                 f"{top['genre']} · {top['duration']} min · {top['rating']}/10\n"
                 f"Moods: {', '.join(top['mood'])}"
