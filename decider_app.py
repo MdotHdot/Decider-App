@@ -7,6 +7,7 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import ListProperty, StringProperty, NumericProperty
 from kivy.clock import Clock
 import random
+from film_search import search_tmdb, enrich_with_details, merge_movies, FilmSearchError
 
 from recommender import MovieRecommender
 
