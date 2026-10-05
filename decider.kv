@@ -265,6 +265,13 @@
             background_color: 0.3, 0.5, 0.9, 1
             on_release: app.root.current = "main"
 
+        Button:
+            text: "Suprise Me!"
+            size_hint_y: None
+            height: "50dp"
+            background_color: 0.6, 0.4, 0.85, 1
+            on_release: root.surprise_me()
+
 <AdvancedSearchScreen>:
     name: "advanced"
     BoxLayout:

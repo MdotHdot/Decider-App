@@ -6,6 +6,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import ListProperty, StringProperty, NumericProperty
 from kivy.clock import Clock
+import random
 
 from recommender import MovieRecommender
 
@@ -231,6 +232,19 @@ class ResultScreen(Screen):
                 )
             )
 
+    def surprise_me(self):
+        if not self.recommendations:
+            self.result_text = "No films to surprise you with."
+            return
+
+        pick = random.choice(self.recommendations)
+
+        self.result_text = (
+            f"Surprise pick: {pick['title']}\n"
+            f"{pick['genre']} · {pick['duration']} min · {pick['rating']}/10\n"
+            f"Moods: {', '.join(pick['mood'])}"   
+        )
+        
 
 class DeciderRoot(ScreenManager):
     pass
