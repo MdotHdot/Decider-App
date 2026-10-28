@@ -70,19 +70,28 @@ python main.py
 
 See **[ANDROID.md](ANDROID.md)**. Short version: push the branch, run the **Build Android APK** GitHub Action, download the artifact, install on your phone.
 
-### 4. Online search (TMDB)
+### 4. Online search (TMDB or amodb)
 
-TMDB is a free official movie API (more reliable than scraping IMDb/RT).
+Two providers share the same API, so switching is a setting, not a code change:
 
-1. Create a free account at [themoviedb.org](https://www.themoviedb.org/signup)
-2. Get an API key: [Settings → API](https://www.themoviedb.org/settings/api)
-3. Export it in your shell:
+| Provider | Cost | Allowed |
+|----------|------|---------|
+| `tmdb` (default) | Free | Non-commercial only: no ads, purchases, or subscriptions. Must show TMDB attribution (the Online screen does). |
+| `amodb` | Paid (from ~$5/month) | Commercial use, e.g. once you add ads |
+
+Get a key: TMDB at [Settings → API](https://www.themoviedb.org/settings/api), amodb at [amodb.dev](https://amodb.dev/).
+
+**In the app (desktop or phone):** Main screen → **Online** → pick the provider, paste the key → **Test** → **Save**. The key is stored on that device only (in the app's data folder), never in the code or APK.
+
+**From the terminal (desktop / CLI):**
 
 ```bash
-export TMDB_API_KEY="your_key_here"
+export TMDB_API_KEY="your_key_here"        # or: export FILM_API_PROVIDER=amodb AMODB_KEY="..."
+python film_search.py Inception            # checks the key and prints 3 results
+python cli.py                              # option 7: Search online
 ```
 
-4. Run the CLI and choose **7. Search online (TMDB)**
+Never commit a key or paste it into chat; regenerate it if you do.
 
 You can preview results and optionally add a film to the **current session** (not saved to disk yet — Exercise 15).
 
@@ -92,7 +101,7 @@ IMDb scraping is left as **Exercise 13** in `film_search.py` for learning Beauti
 
 - **Single filters** — mood, genre, or duration alone
 - **Advanced Search** — combine all three (fix "Any" in Exercise 5)
-- **Online search** — TMDB API from the CLI
+- **Online search** — TMDB/amodb from the GUI **Online** screen (works on Android) and CLI option 7
 - **28 local films** — drama, comedy, sci-fi, horror, animation, and more
 
 ## Your next steps
@@ -105,7 +114,7 @@ Open **`EXERCISES.md`**. For this branch, start with **Exercise 13** (IMDb scrap
 | 13 | Finish IMDb BeautifulSoup scraper |
 | 14 | Guess moods for online films |
 | 15 | Persist added films to disk |
-| 16 | GUI Online Search screen |
+| 16 | GUI Online Search screen (done) |
 
 ## CLI quick examples
 

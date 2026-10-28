@@ -18,14 +18,18 @@ source.include_exts = py,png,jpg,kv,atlas
 # (list) Source files to exclude
 source.exclude_exts = spec
 source.exclude_dirs = tests, bin, .venv, kivy_venv, venv, .buildozer, __pycache__, .github
-# Keep CLI/TMDB modules out of the APK so p4a does not pull requests/bs4
-source.exclude_patterns = license,images/*/*.jpg,.git/*,*.md,cli.py,film_search.py
+# The CLI is desktop-only; film_search.py ships so the Online screen works on the phone
+source.exclude_patterns = license,images/*/*.jpg,.git/*,*.md,cli.py
 
 # (str) Application versioning (method 1)
-version = 0.1.0
+version = 0.2.0
 
-# (list) Application requirements — GUI only for phone feel-test
-requirements = python3,kivy
+# (list) Application requirements
+# The kivy recipe already bundles requests + certifi (used by film_search.py).
+# charset-normalizer >= 3.5 publishes Android wheels that p4a 2026.05.09 resolves
+# but then fails to install ("not a supported wheel on this platform"), so pin
+# the pure-Python 3.4.9 wheel by URL. Remove once p4a fixes that.
+requirements = python3,kivy,charset-normalizer@https://files.pythonhosted.org/packages/98/2b/f97f1c193fb855c345d678f5077d6926034db0722df74c8f057020e05a25/charset_normalizer-3.4.9-py3-none-any.whl
 
 # (str) Supported orientation
 orientation = portrait

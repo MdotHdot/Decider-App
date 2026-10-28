@@ -1,12 +1,12 @@
 # Run Movie Decider on Android
 
-The phone app is the **Kivy GUI** (`main.py`). The CLI (`cli.py`) and TMDB online search stay on your computer for now.
+The phone app is the **Kivy GUI** (`main.py`). The CLI (`cli.py`) stays on your computer.
 
 ## What you’ll get
 
 - An installable **debug APK** (not Play Store–signed)
-- Mood / Genre / Duration / Advanced Search from the existing GUI
-- Local 28-film database only (no online search on phone yet — Exercise 16)
+- Mood / Genre / Duration / Advanced Search / Surprise Me
+- **Online** search (TMDB or amodb). On first use: Online → paste your key → **Test** → **Save**. The key lives only on the phone, not in the APK.
 
 ## Recommended path: GitHub Actions (no Docker on your Mac)
 
@@ -24,7 +24,7 @@ Buildozer on macOS Apple Silicon is painful — use CI instead:
 |-------|-------------|
 | `LT_SYS_SYMBOL_USCORE` | Install `libltdl-dev` + `automake` |
 | Python 3.14 / broken pip in p4a | Pin Buildozer 1.5.0 + `p4a.branch = master` |
-| Auto-pulled `requests` from CLI modules | Exclude `cli.py` / `film_search.py` from the APK |
+| `charset_normalizer-3.5.x-...android...whl is not a supported wheel` | The kivy recipe pulls in `requests`; p4a picks charset-normalizer's new Android wheel then can't install it. `buildozer.spec` pins the pure-Python 3.4.9 wheel by URL |
 | Long dual-arch builds | Build `arm64-v8a` only (modern phones) |
 | Node 20 action warnings | Use checkout/setup/cache/upload `@v5`/`@v6` |
 
@@ -61,4 +61,4 @@ docker run --interactive --tty --rm \
 
 ## After you try it on the phone
 
-Note what feels awkward (button size, scrolling, text size, portrait layout). We can tune `decider.kv` for mobile next, then add online search to the GUI (Exercise 16).
+Note what feels awkward (button size, scrolling, text size, portrait layout). We can tune `decider.kv` for mobile next.
