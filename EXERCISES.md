@@ -10,7 +10,7 @@ Work through these in order. Earlier ones are done; new ones build on advanced s
 | GUI single filters | Mood, genre, duration |
 | Advanced Search screen | UI + combined search (with one bug — Exercise 5) |
 | Movie database | 28 films with genre, mood, duration, rating, year |
-| Online search (TMDB) | CLI option 7 — requires `TMDB_API_KEY` |
+| Online search (TMDB / amodb) | GUI **Online** screen + CLI option 7 — key entered in-app or via `TMDB_API_KEY` |
 | IMDb scraper | Skeleton only — Exercise 13 |
 | Repo setup | `.gitignore`, `requirements.txt`, own git root |
 
@@ -170,15 +170,17 @@ When the user adds a TMDB film in CLI option 7, save it so the next run still ha
 
 ---
 
-## Exercise 16 — GUI Online Search screen (~45 min)
+## Exercise 16 — GUI Online Search screen ✅ done
 
-**Files:** `decider_app.py`, `decider.kv`
+**Files:** `decider_app.py` → `OnlineScreen`, `decider.kv` → `<OnlineScreen>`
 
-Add an **Online** button on the main screen that opens a new screen:
+What's there now, worth reading through:
 
-1. Text box + Search button
-2. Call `search_tmdb` (run network calls carefully — Kivy is single-threaded)
-3. Show results; tap one to enrich + optionally merge into `app.recommender.movies`
+1. Provider spinner (`tmdb` / `amodb`) + API key box with **Test** and **Save** (saved to `settings.json` in `App.user_data_dir`)
+2. `search_tmdb` runs on a background thread (`_run_in_background`); results come back to the UI via `Clock.schedule_once`, because Kivy widgets may only be changed on the main thread
+3. Tap a result → `enrich_with_details` → **Add to my list** merges it into `app.recommender.movies`
+
+**Stretch:** show a spinner/"Searching..." animation while `busy` is True.
 
 ---
 
